@@ -5,13 +5,11 @@ from pydantic import BaseModel, EmailStr
 
 class ShowUser(BaseModel):
     user_id: uuid.UUID
-    username: str
     email: EmailStr
     is_active: bool
 
 
 class UserCreate(BaseModel):
-    username: str
     email: EmailStr
     password: str
 

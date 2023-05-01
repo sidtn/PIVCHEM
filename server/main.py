@@ -1,11 +1,11 @@
 import uvicorn
 from fastapi import APIRouter, FastAPI
-from src.users.hendlers import user_router
+from src.auth.handlers import auth_router
 
 app = FastAPI(title="Pivchem")
 
 main_api_router = APIRouter()
-main_api_router.include_router(user_router, prefix="/user", tags=["user"])
+main_api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(main_api_router)
 
 

@@ -11,10 +11,9 @@ class UserService:
         self.db_session = db_session
 
     async def create_user(
-        self, username: str, email: str, hashed_password: str, is_admin: bool = False
+        self, email: str, hashed_password: str, is_admin: bool = False
     ) -> User:
         new_user = User(
-            username=username,
             email=email,
             hashed_password=hashed_password,
             is_admin=is_admin,
@@ -34,8 +33,8 @@ class UserService:
         deleted_user = result.fetchone()
         return deleted_user[0] if deleted_user else None
 
-    async def get_user(self, user_id: UUID) -> Union[User, None]:
-        query = select(User).where(User.user_id == user_id)
+    async def get_user_by_email(self, email: str) -> Union[User, None]:
+        query = select(User).where(User.email == email)
         result = await self.db_session.execute(query)
         user = result.fetchone()
         return user[0] if user else None

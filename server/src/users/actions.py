@@ -10,13 +10,11 @@ async def _create_new_user(body: UserCreate, session) -> ShowUser:
     async with session.begin():
         user_service = UserService(session)
         user = await user_service.create_user(
-            username=body.username,
             email=body.email,
             hashed_password=Hasher.get_password_hash(body.password),
         )
         return ShowUser(
             user_id=user.user_id,
-            username=user.username,
             email=user.email,
             is_active=user.is_active,
         )
