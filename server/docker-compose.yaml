@@ -3,9 +3,9 @@ services:
   postgres:
     image: postgres:13.3
     environment:
-      POSTGRES_DB: "pivchem"
-      POSTGRES_USER: "admin"
-      POSTGRES_PASSWORD: "root"
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - ./pg_data:/docker-entrypoint-initdb.d
     ports:
