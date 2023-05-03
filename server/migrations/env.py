@@ -3,7 +3,7 @@ from logging.config import fileConfig
 from alembic import context
 from settings import DATABASE_URL
 from sqlalchemy import engine_from_config, pool
-from src.users.models import Base as UserBase
+from db.base import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -19,7 +19,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 
-target_metadata = [UserBase.metadata]
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
