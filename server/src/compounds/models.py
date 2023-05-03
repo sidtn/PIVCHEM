@@ -1,11 +1,10 @@
-from datetime import datetime
 import uuid
-
-from razi.rdkit_postgresql.types import Mol
-from sqlalchemy import UUID, Column, String, Index, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
+from datetime import datetime
 
 from db.base_class import Base
+from razi.rdkit_postgresql.types import Mol
+from sqlalchemy import UUID, Column, DateTime, ForeignKey, Index, String
+from sqlalchemy.orm import relationship
 
 
 class Compound(Base):
@@ -20,8 +19,7 @@ class Compound(Base):
     image_url = Column(String)
 
     __table_args__ = (
-        Index('compounds_structure', 'structure',
-              postgresql_using='gist'),
+        Index("compounds_structure", "structure", postgresql_using="gist"),
     )
 
     def __repr__(self):
