@@ -1,5 +1,4 @@
-./pg_data
-.env
+./docker_data
 __pycache__/
 .idea
 .pytest_cache

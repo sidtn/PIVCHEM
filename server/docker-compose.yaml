@@ -7,6 +7,21 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./pg_data:/docker-entrypoint-initdb.d
+      - ./docker_data/pg_data:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./docker_data/minio_storage:/data
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: minio_secret_key
+    command: server --console-address ":9001" /data
+
+volumes:
+  minio_storage: {}
