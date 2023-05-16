@@ -2,18 +2,18 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from src.auth.actions import user_is_admin
-from src.compounds.schemas import UploadSDFResponse
+from src.compounds.schemas import UploadSDFResponse, CompoundIn, CompoundOut
 from src.compounds.services import get_data_from_sdf
-from src.users.models import User
 from starlette import status
 
-compounds_router = APIRouter()
+compounds_router = APIRouter(dependencies=[Depends(user_is_admin)])
 
 
 @compounds_router.post(
-    "/upload_sdf", summary="Upload sdf file", response_model=List[UploadSDFResponse]
+    "/upload_sdf", summary="Upload sdf file",
+    response_model=List[UploadSDFResponse]
 )
-async def upload_sdf(file: UploadFile, user: User = Depends(user_is_admin)):
+async def upload_sdf(file: UploadFile):
     if not file.filename.endswith(".sdf"):
         raise HTTPException(
             status_code=status.HTTP_406_NOT_ACCEPTABLE,
@@ -26,3 +26,8 @@ async def upload_sdf(file: UploadFile, user: User = Depends(user_is_admin)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"File decoding error {err}"
         )
+
+
+@compounds_router.post("/",  response_model=CompoundOut)
+async def add_compound(body: CompoundIn):
+    return body

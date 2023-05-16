@@ -18,7 +18,7 @@ def generate_img_url_from_mol(mol: Mol) -> Union[str, None]:
     return res
 
 
-def get_data_from_sdf(sdf_data: NamedTemporaryFile) -> list:
+def get_data_from_sdf(sdf_data: NamedTemporaryFile) -> list[dict]:
     with Chem.ForwardSDMolSupplier(sdf_data) as sdf:
         mols = [mol for mol in sdf if mol]
 
@@ -27,6 +27,7 @@ def get_data_from_sdf(sdf_data: NamedTemporaryFile) -> list:
             "id": num,
             "smile": Chem.MolToSmiles(mol),
             "img_url": generate_img_url_from_mol(mol),
+            "props": mol.GetPropsAsDict()
         }
         for num, mol in enumerate(mols, start=1)
     ]
