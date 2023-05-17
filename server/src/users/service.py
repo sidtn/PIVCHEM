@@ -1,5 +1,4 @@
 from typing import Union
-from uuid import UUID
 
 from sqlalchemy import and_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,7 +21,7 @@ class UserService:
         await self.db_session.flush()
         return new_user
 
-    async def delete_user(self, user_id: UUID) -> Union[User, None]:
+    async def delete_user(self, user_id: int) -> Union[User, None]:
         query = (
             update(User)
             .where(and_(User.user_id == user_id, User.is_active is True))

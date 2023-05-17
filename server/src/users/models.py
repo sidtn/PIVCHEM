@@ -1,11 +1,9 @@
-import uuid
-
 from db.base_class import Base
-from sqlalchemy import UUID, Boolean, Column, String
+from sqlalchemy import Boolean, Column, Integer, String
 
 
 class User(Base):
-    user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(Integer, primary_key=True)
     email = Column(String, nullable=False, unique=True)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)

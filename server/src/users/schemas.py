@@ -1,10 +1,8 @@
-import uuid
-
 from pydantic import BaseModel, EmailStr
 
 
 class ShowUser(BaseModel):
-    user_id: uuid.UUID
+    user_id: int
     email: EmailStr
     is_active: bool
 
@@ -15,8 +13,8 @@ class UserCreate(BaseModel):
 
 
 class DeleteUserResponse(BaseModel):
-    deleted_user_id: uuid.UUID
+    deleted_user_id: int
 
 
 class UpdatedUserResponse(BaseModel):
-    updated_user_id: uuid.UUID
+    updated_user_id: int

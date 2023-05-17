@@ -9,7 +9,7 @@ DATABASE_URL: str = env.str(
 )
 
 SECRET_KEY: str = env.str("SECRET_KEY", default="secret_key")
-ACCESS_TOKEN_EXPIRE_MINUTES: int = env.int("ACCESS_TOKEN_EXPIRE_MINUTES", default=30)
+ACCESS_TOKEN_EXPIRE_MINUTES: int = env.int("ACCESS_TOKEN_EXPIRE_MINUTES", default=1000)
 REFRESH_TOKEN_EXPIRE_MINUTES: int = env.int(
     "REFRESH_TOKEN_EXPIRE_MINUTES", default=60 * 24 * 7
 )

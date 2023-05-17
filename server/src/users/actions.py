@@ -1,5 +1,4 @@
 from typing import Union
-from uuid import UUID
 
 from src.auth.hasher import Hasher
 from src.users.schemas import ShowUser, UserCreate
@@ -20,7 +19,7 @@ async def _create_new_user(body: UserCreate, session) -> ShowUser:
         )
 
 
-async def _delete_user(user_id, session) -> Union[UUID, None]:
+async def _delete_user(user_id, session) -> Union[int, None]:
     async with session.begin():
         user_service = UserService(session)
         deleted_user_id = await user_service.delete_user(

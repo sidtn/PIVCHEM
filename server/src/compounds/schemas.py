@@ -1,5 +1,4 @@
 from datetime import datetime
-from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -8,11 +7,10 @@ class UploadSDFResponse(BaseModel):
     id: int
     smile: str
     reg_number: str
-    img_url: str
+    image_url: str
 
 
 class CompoundIn(BaseModel):
-    reg_number: str
     name: str
     structure: str
     formula: str
@@ -25,10 +23,12 @@ class CompoundIn(BaseModel):
     doi: str
     cas: str
     storage: str
-    img_url: str
     in_stock: bool
 
 
 class CompoundOut(CompoundIn):
-    id: UUID
+    id: int
+    reg_number: str
     created_at: datetime
+    image_url: str
+    added_by: int
