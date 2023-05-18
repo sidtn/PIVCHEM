@@ -1027,25 +1027,6 @@ files = [
 ]
 
 [[package]]
-name = "razi"
-version = "0.0.0"
-description = ""
-category = "main"
-optional = false
-python-versions = ">=3.6"
-files = []
-develop = false
-
-[package.dependencies]
-SQLAlchemy = ">=0.7.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/rvianello/razi.git"
-reference = "HEAD"
-resolved_reference = "b5e11fa4e8fe2d8fa973a2091c1ce75aa0f6771c"
-
-[[package]]
 name = "rdkit"
 version = "2023.3.1"
 description = "A collection of chemoinformatics and machine-learning software written in C++ and Python"
@@ -1317,4 +1298,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.3)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3dbbc1022edef9b133eab0aad99d5b5c9f1ddaa9f61a2730c119e63c5f85bae0"
+content-hash = "9581690e8b1a96d5d4f556dc840921b03c13ccea4927a5c17adfd87b5114945c"

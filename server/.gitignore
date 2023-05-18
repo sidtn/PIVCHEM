@@ -1,4 +1,5 @@
-./docker_data
+pg_data
+minio_storage
 __pycache__/
 .idea
 .pytest_cache

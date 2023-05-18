@@ -14,14 +14,7 @@ class CompoundIn(BaseModel):
     name: str
     structure: str
     formula: str
-    mol_weight: float
     tags: str
-    mnr: str
-    ms: str
-    hplc: str
-    mp: str
-    doi: str
-    cas: str
     storage: str
     in_stock: bool
 

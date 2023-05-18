@@ -16,10 +16,10 @@ minio_client = MinioClientFactory().get_client()
 async def get_next_reg_number(db_session: AsyncSession) -> str:
     query = select(Compound.reg_number).order_by(Compound.reg_number.desc())
     result = await db_session.execute(query)
-    last_reg_number = result.first()[0]
+    last_reg_number = result.first()
     if not last_reg_number:
         return "iboch0000001"
-    next_num = int(last_reg_number.lstrip("iboch")) + 1
+    next_num = int(last_reg_number[0].lstrip("iboch")) + 1
     return "iboch" + str(next_num)
 
 
