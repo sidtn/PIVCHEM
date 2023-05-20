@@ -1,0 +1,16 @@
+.btn {
+    padding: 7px 15px;
+    margin-top: 10px;
+    color: red;
+    background: transparent;
+    font-size: large;
+    border: 2px solid red;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  
+  .btn:disabled {
+    color: gray;
+    border: 2px solid gray;
+    cursor: default;
+  }
