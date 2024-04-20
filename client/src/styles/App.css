@@ -4,24 +4,3 @@
     box-sizing: border-box;
 }
 
-
-.login__main {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background-image: url("../components/assets/login-background.jpg");
-}
-
-
-.login {
-    width: 30%;
-    padding: 10px 15px;
-    margin: 20% 0 0 35%;
-    border: 3px solid red;
-    background-color: rgb(228, 228, 228);
-    border-radius: 20px;
-    font-size: 16px;
-    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
-}
