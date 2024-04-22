@@ -1,0 +1,25 @@
+.wrapper {
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2em;
+}
+
+.chemeditor {
+  height: 82%;
+  width: 50%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+@media screen and (max-width: 1080px) {
+  .chemeditor {
+    width: 90%;
+    height: 60%;
+  }
+}
+
+.controls {
+  margin-top: 2em;
+}
+
