@@ -14,7 +14,7 @@ from src.auth.exceptions import (
 from src.auth.hasher import Hasher
 from src.auth.jwt import create_jwt_token
 from src.users.models import User
-from src.users.service import UserService
+from src.users.services import UserService
 from starlette import status
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/signin")

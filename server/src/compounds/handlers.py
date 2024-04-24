@@ -4,10 +4,10 @@ from db.session import get_db
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.auth.actions import user_is_admin
+from src.auth.services import user_is_admin
 from src.compounds.models import Compound
 from src.compounds.schemas import CompoundIn, CompoundOut, UploadSDFResponse
-from src.compounds.service import CompoundService
+from src.compounds.services import CompoundService
 from src.compounds.utils import get_data_from_sdf
 from src.users.models import User
 from starlette import status
