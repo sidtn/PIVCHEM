@@ -62,3 +62,18 @@ async def activate_user(body: ActivateUser, db: AsyncSession = Depends(get_db)):
         "access_token": create_jwt_token(user.email, token_type="access"),
         "refresh_token": create_jwt_token(user.email, token_type="refresh"),
     }
+
+
+@user_router.get(
+    "/", summary="Users list", dependencies=[Depends(user_is_admin)], response_model=list[ShowUser], status_code=200)
+async def user_list(db: AsyncSession = Depends(get_db)):
+    user_service = UserService(db)
+    users = await user_service.get_users()
+    return [
+        ShowUser(
+            user_id=user.user_id,
+            email=user.email,
+            is_admin=user.is_admin,
+            is_active=user.is_active
+        ) for user in users
+    ]

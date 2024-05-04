@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Union
+from typing import Union, Sequence
 
 from fastapi import HTTPException
 from jose import jwt, ExpiredSignatureError, JWTError
@@ -77,3 +77,8 @@ class UserService:
         result = await self.db_session.execute(query)
         user = result.fetchone()
         return user[0]
+
+    async def get_users(self) -> Sequence[User]:
+        result = await self.db_session.execute(select(User))
+        users = result.scalars().all()
+        return users
