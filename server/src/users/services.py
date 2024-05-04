@@ -1,13 +1,16 @@
+from datetime import datetime, timedelta
 from typing import Union
 
 from fastapi import HTTPException
-from sqlalchemy import and_, select, update
+from jose import jwt, ExpiredSignatureError, JWTError
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
 
+from settings import SECRET_KEY, ALGORITHM, INVITE_CODE_EXPIRE_DAYS
+from src.auth.exceptions import token_expired_exception, credentials_exception
 from src.auth.hasher import Hasher
 from src.users.models import User
-from src.users.schemas import UserCreate, ShowUser
+from src.users.schemas import CreateUser, UpdateUser, ActivateUser
 
 
 class UserService:
@@ -20,31 +23,57 @@ class UserService:
         user = result.fetchone()
         return user[0] if user else None
 
-    async def create_user(self, body: UserCreate) -> ShowUser:
+    @staticmethod
+    def _generate_invite_code(user_email: str) -> str:
+        expires_at = datetime.now() + timedelta(days=INVITE_CODE_EXPIRE_DAYS)
+        to_encode = {"exp": expires_at, "user_email": user_email}
+        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
+        return encoded_jwt
+
+    async def create_user(self, body: CreateUser) -> User:
+        invite_code = self._generate_invite_code(body.email)
+
         new_user = User(
             email=body.email,
-            hashed_password=Hasher.get_password_hash(body.password),
             is_admin=body.is_admin,
+            invite_code=invite_code
         )
 
         self.db_session.add(new_user)
         await self.db_session.flush()
 
-        return ShowUser(
-            user_id=new_user.user_id,
-            email=new_user.email,
-            is_admin=new_user.is_admin,
-            is_active=new_user.is_active
-        )
+        return new_user
 
-    async def delete_user(self, user_id: int) -> Union[User, None]:
-        print(user_id)
+    async def update_user(self, user_id, body: UpdateUser) -> Union[User, None]:
         query = (
             update(User)
-            .where(and_(User.is_active.is_(True), User.user_id == user_id))
-            .values(is_active=False)
-            .returning(User.user_id)
+            .where(User.user_id == user_id)
+            .values(**body.dict())
+            .returning(User)
         )
         result = await self.db_session.execute(query)
-        deleted_user = result.fetchone()
-        return deleted_user[0] if deleted_user else None
+        user = result.fetchone()
+        return user[0] if user else None
+
+    async def activate_user(self, body: ActivateUser) -> Union[User, None]:
+        try:
+            key = jwt.decode(body.invite_key, SECRET_KEY, algorithms=[ALGORITHM])
+            user = await self.get_user_by_email(key.get("user_email"))
+            if user.is_active:
+                raise HTTPException(status_code=400, detail="Already activated")
+        except ExpiredSignatureError:
+            raise token_expired_exception
+        except JWTError:
+            raise credentials_exception
+
+        hashed_password = Hasher.get_password_hash(body.password1)
+
+        query = (
+            update(User)
+            .where(User.email == key["user_email"])
+            .values(hashed_password=hashed_password, is_active=True)
+            .returning(User)
+        )
+        result = await self.db_session.execute(query)
+        user = result.fetchone()
+        return user[0]
