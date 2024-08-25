@@ -1,10 +1,21 @@
 import uvicorn
 from fastapi import APIRouter, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from src.auth.handlers import auth_router
 from src.compounds.handlers import compounds_router
 from src.users.handlers import user_router
 
 app = FastAPI(title="Pivchem")
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 main_api_router = APIRouter()
 main_api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
