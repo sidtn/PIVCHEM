@@ -2,10 +2,8 @@ from typing import Annotated, List
 
 from db.session import get_db
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.auth.services import user_is_admin
-from src.compounds.models import Compound
 from src.compounds.schemas import CompoundIn, CompoundOut, UploadSDFResponse
 from src.compounds.services import CompoundService
 from src.compounds.utils import get_data_from_sdf

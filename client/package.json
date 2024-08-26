@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.2.1",
     "axios": "^1.7.5",
     "bootstrap": "^5.3.3",
+    "jwt-decode": "^4.0.0",
     "ketcher-core": "^2.18.0",
     "ketcher-macromolecules": "^2.18.0",
     "ketcher-react": "^2.18.0",

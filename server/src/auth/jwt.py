@@ -10,7 +10,7 @@ from settings import (
 )
 
 
-def create_jwt_token(subject: Union[str, Any], token_type: str = "access") -> str:
+def create_jwt_token(user_id: int, subject: str,  token_type: str = "access") -> str:
     delta = (
         ACCESS_TOKEN_EXPIRE_MINUTES
         if token_type == "access"
@@ -18,6 +18,6 @@ def create_jwt_token(subject: Union[str, Any], token_type: str = "access") -> st
     )
     expires_at = datetime.now() + timedelta(minutes=delta)
 
-    to_encode = {"exp": expires_at, "sub": str(subject), "token_type": token_type}
+    to_encode = {"exp": expires_at, "id": user_id, "sub": subject, "token_type": token_type}
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
     return encoded_jwt

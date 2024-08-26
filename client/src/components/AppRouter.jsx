@@ -6,7 +6,11 @@ import { Login } from '../pages/login/Login';
 export const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={
+        localStorage.getItem('user_id') ? 
+        <ChemEditor /> : <Login />
+      } 
+      />
       <Route path="/editor" element={<ChemEditor />} />
       <Route path="/*" element={<Navigate to="/editor" />} />
     </Routes>

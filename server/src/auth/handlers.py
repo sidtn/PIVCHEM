@@ -28,8 +28,8 @@ async def login(
         )
 
     return {
-        "access_token": create_jwt_token(auth_user.email, token_type="access"),
-        "refresh_token": create_jwt_token(auth_user.email, token_type="refresh"),
+        "access_token": create_jwt_token(auth_user.user_id, auth_user.email, token_type="access"),
+        "refresh_token": create_jwt_token(auth_user.user_id, auth_user.email, token_type="refresh"),
     }
 
 

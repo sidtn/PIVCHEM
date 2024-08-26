@@ -1,11 +1,15 @@
 import api from 'api/api';
+import notify from 'components/Notify';
+import { jwtDecode } from 'jwt-decode';
 import React, {useState}  from 'react'
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 
 export const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate()
   
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -21,18 +25,15 @@ export const Login = () => {
   
         localStorage.setItem('access_token', access_token);
         localStorage.setItem('refresh_token', refresh_token);
+
+        let decoded_token = jwtDecode(access_token)
+        localStorage.setItem('user_id', decoded_token.id)
+        localStorage.setItem('username', decoded_token.sub)
+        
+        navigate('/editor')
   
       } catch (err) {
-        toast.error("Invalid username or password", {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          })
+        notify('Invalid username or password')
       }
     };
 
