@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from sqlalchemy.dialects.postgresql import JSONB
+
 from db.base_class import Base
 from rdkit import Chem
 from sqlalchemy import (
@@ -12,57 +14,50 @@ from sqlalchemy import (
     Integer,
     String,
     func,
+    TypeDecorator,
 )
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.type_api import UserDefinedType
 
 
-class Mol(UserDefinedType):
-    cache_ok = True
+class Mol(TypeDecorator):
+    impl = String
 
-    def get_col_spec(self, **kw):
-        return "mol"
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        if isinstance(value, Chem.Mol):
+            return Chem.MolToSmiles(value)
+        raise ValueError(f"Unexpected value: {value}")
 
-    def bind_processor(self, dialect):
-        def process(value):
-            if isinstance(value, Chem.Mol):
-                value = Chem.MolToSmiles(value)
-            return value
-        return process
-
-    def column_expression(self, col):
-        return func.mol_to_pkl(col, type_=self)
-
-    def result_processor(self, dialect, coltype):
-        def process(value):
-            return Chem.MolToSmiles(Chem.Mol(value)) if value else None
-        return process
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        return Chem.MolFromSmiles(value)
 
 
 class Compound(Base):
     compound_id = Column(Integer, primary_key=True)
-    reg_number = Column(String, nullable=False, unique=True)
-    name = Column(String)
+    reg_number = Column(String, nullable=True, unique=True)
+    name = Column(String, nullable=True)
     structure = Column(Mol, nullable=False, unique=True)
-    formula = Column(String)
-    mol_weight = Column(Float)
-    tags = Column(String)
-    mnr = Column(String)
-    ms = Column(String)
-    hplc = Column(String)
-    mp = Column(String)
-    doi = Column(String)
-    cas = Column(String)
-    storage = Column(String, nullable=False)
-    added_by_id = Column(Integer, ForeignKey("user.user_id"))
+    mol_weight = Column(Float, nullable=True)
+    mnr = Column(String, nullable=True)
+    ms = Column(String, nullable=True)
+    hplc = Column(String, nullable=True)
+    mp = Column(String, nullable=True)
+    doi = Column(String, nullable=True)
+    cas = Column(String, nullable=True)
+    storage = Column(String, nullable=True)
+    added_by_id = Column(Integer, ForeignKey("users.user_id"))
     added_by = relationship("User", backref="compounds")
-    created_at = Column(DateTime, default=datetime.utcnow)
-    image_url = Column(String)
-    in_stock = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.now)
+    image_url = Column(String, nullable=True)
+    props = Column(JSONB, nullable=True)
+    in_stock = Column(Boolean, default=False)
 
     __table_args__ = (
         Index("compounds_structure", "structure", postgresql_using="gist"),
     )
 
     def __repr__(self):
-        return f"{self.reg_number}"
+        return f"{self.structure}"

@@ -65,8 +65,13 @@ async def activate_user(body: ActivateUser, db: AsyncSession = Depends(get_db)):
 
 
 @user_router.get(
-    "/", summary="Users list", dependencies=[Depends(user_is_admin)], response_model=list[ShowUser], status_code=200)
-async def user_list(db: AsyncSession = Depends(get_db)):
+    "/",
+    summary="Users list",
+    dependencies=[Depends(user_is_admin)],
+    response_model=list[ShowUser],
+    status_code=200
+)
+async def user_list(db: AsyncSession = Depends(get_db)) -> list[ShowUser]:
     user_service = UserService(db)
     users = await user_service.get_users()
     return [

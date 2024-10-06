@@ -1,27 +1,38 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
+from rdkit import Chem
 
 
 class UploadSDFResponse(BaseModel):
-    id: int
     smile: str
-    reg_number: str
-    image_url: str
+    props: dict | None
 
 
 class CompoundIn(BaseModel):
-    name: str
+    name: str | None
     structure: str
-    formula: str
-    tags: str
-    storage: str
-    in_stock: bool
+    storage: str | None = None
+    in_stock: bool = False
+
+    @classmethod
+    def from_rdkit(cls, compound):
+        return cls(
+            name=compound.name,
+            structure=Chem.MolToSmiles(compound.structure),
+            props=compound.props,
+            storage=compound.storage,
+            in_stock=compound.in_stock,
+        )
+
+    def to_rdkit(self):
+        return Chem.MolFromSmiles(self.structure)
 
 
 class CompoundOut(CompoundIn):
-    id: int
-    reg_number: str
+    compound_id: int
+    reg_number: str | None = None
     created_at: datetime
-    image_url: str
-    added_by: int
+    image_url: str | None
+    props: dict | None = None
+    added_by: int | None = None
